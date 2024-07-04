@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <style>
+    .cell {
+      width: 75px;
+      height: 75px;
+      border: 2px solid;
+      line-height: 75px;
+      box-shadow: 0 0 2px;
+      cursor: pointer;
+      font-size: 45px;
+    }
+    .cell:hover {
+      background-color: antiquewhite;
+    }
+    #container {
+      width: 225px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+    }
+    #resetbtn:hover {
+      background-color: lightpink;
+    }
+    body {
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <h1 id="topic">Tic Tac Toe</h1>
+    <div id="container">
+      <div class="cell" textindex="0"></div>
+      <div class="cell" textindex="1"></div>
+      <div class="cell" textindex="2"></div>
+      <div class="cell" textindex="3"></div>
+      <div class="cell" textindex="4"></div>
+      <div class="cell" textindex="5"></div>
+      <div class="cell" textindex="6"></div>
+      <div class="cell" textindex="7"></div>
+      <div class="cell" textindex="8"></div>
+    </div>
+    <h2 id="msg"></h2>
+    <button id="resetbtn">Reset Game</button>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const cell = document.getElementsByClassName('cell');
+    const player = ['X', 'O'];
+    let currentplayer = player[0];
+    const endmsg = document.createElement('h3');
+    endmsg.textContent = "X's Turn!";
+    endmsg.style.marginTop = '5px';
+    endmsg.style.textAlign = 'center';
+    container.after(endmsg);
+
+    const winning_combinations = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    for (let i = 0; i < cell.length; i++) {
+      cell[i].addEventListener('click', () => {
+        if (cell[i].textContent !== '') {
+          return; 
+        }
+
+        cell[i].textContent = currentplayer;
+
+        if (checkWin()) {
+          endmsg.textContent = `Game over! ${currentplayer} Wins`;
+          return;
+        }
+
+        if (checkdraw()) {
+          endmsg.textContent = "Game is draw!";
+          return;
+        }
+
+        currentplayer = (currentplayer === player[0]) ? player[1] : player[0];
+
+        if (currentplayer === player[0]) {
+          endmsg.textContent = "X's Turn!";
+        } else {
+          endmsg.textContent = "O's Turn!";
+        }
+      });
+    }
+
+    function checkWin() {
+      for (let i = 0; i < winning_combinations.length; i++) {
+        const [a, b, c] = winning_combinations[i];
+        if (cell[a].textContent === currentplayer && cell[b].textContent === currentplayer && cell[c].textContent === currentplayer) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function checkdraw() {
+      for (let i = 0; i < cell.length; i++) {
+        if (cell[i].textContent === '') {
+          return false; 
+        }
+      }
+      return true; 
+    }
+
+    document.getElementById('resetbtn').addEventListener('click', resetGame);
+
+    function resetGame() {
+      for (let i = 0; i < cell.length; i++) {
+        cell[i].textContent = '';
+      }
+      currentplayer = player[0];
+      endmsg.textContent = "X's Turn!";
+    }
+  </script>
+</body>
+</html>
